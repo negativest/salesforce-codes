@@ -1,0 +1,41 @@
+trigger LiveChatObjects on LiveChatTranscript (before insert) {
+    /* LiveChatトランスクリプト生成前に関連させるケース、取引先を用意するトリガーです */
+    for (LiveChatTranscript chatTranscript : Trigger.New) {
+        
+        // Identify Contact
+        // Note that the queue is actually the 'Group' object
+        String chatQueueId = chatTranscript.OwnerId;
+        //String customerFirstName = 'Lauren';
+        //String customerLastName = 'Boyle';
+        String customerEmail ='lbaxter@example.com';
+        
+        List<Contact> contacts = [SELECT Id, Name, OwnerId FROM Contact Where email =:customerEmail LIMIT 1];
+        
+        String contactId = '';
+        String contactOwnerId = '';
+        if (contacts.size()>0){
+            Contact contact = contacts.get(0);
+            contactId = contact.Id;
+            contactOwnerId = contact.OwnerId;
+        }
+        
+        // Create Case
+        Case chatCase = new Case();
+        chatCase.Subject = 'チャットボットケース';
+        chatCase.RecordTypeId = '0126A0000012j9TQAQ';
+        chatCase.Description = 'チャット対応履歴管理ケース';
+        chatCase.Origin = 'チャット';
+        chatCase.Status = '完了';
+        chatCase.Priority = 'Medium';
+        chatCase.ContactId = contactId;
+        chatCase.OwnerId = contactOwnerId;
+        chatCase.Reason = '';
+        chatCase.Type = '';
+        insert chatCase;
+        
+        // Update Chat Transcript
+        chatTranscript.ContactId = contactId;
+        chatTranscript.CaseId = chatCase.Id;
+ 
+    }
+}
