@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+
+    <lightning:card iconName="custom:custom80 " title="おためし!! " class="slds-is-relative">
+        <div class="slds-box">
+            <p>openTab()テスト</p>
+            <lightning:workspaceAPI aura:id="workspace"/>
+            <lightning:button label="openTab()で外部を開く" onclick="{!c.openTabTest}"/><br />
+            <lightning:button label="openTab()で取引先責任者を開く" onclick="{!c.openTabOre}"/>
+            <lightning:button label="openTab()で相対パスVFを開く" onclick="{!c.openTabVFTest}"/>
+        </div>
+    </lightning:card>
+</aura:component>

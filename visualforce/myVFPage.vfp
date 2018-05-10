@@ -1,0 +1,24 @@
+<apex:page lightningStylesheets="true">
+	<!-- Visualforceでテーマを切り替える検証 -->
+    <h1>これは myVFPageです</h1>
+    <apex:pageBlock title="My Content" rendered="{!$User.UITheme == 'Theme1'}">
+	    <h2>古い Salesforce テーマ</h2>
+    </apex:pageBlock>
+    
+    <apex:pageBlock title="My Content" rendered="{!$User.UITheme == 'Theme2'}">
+	    <h2>Salesforce Classic 2005 ユーザインターフェースのテーマ</h2>
+    </apex:pageBlock>
+
+    <apex:pageBlock title="My Content" rendered="{!$User.UITheme == 'Theme3'}">
+	    <h2>Salesforce Classic 2010 ユーザインターフェースのテーマ</h2>
+    </apex:pageBlock>
+    
+    <apex:pageBlock title="My Content" rendered="{!$User.UITheme == 'Theme4d'}">
+	    <h2>最新の「Lightning Experience」Salesforce のテーマ</h2>
+    </apex:pageBlock>
+
+    <apex:pageBlock title="My Content" rendered="{!$User.UITheme == 'Theme4u'}">
+	    <h2>Lightning コンソールのテーマ</h2>
+    </apex:pageBlock>
+    
+</apex:page>
