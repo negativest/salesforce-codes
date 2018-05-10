@@ -1,0 +1,501 @@
+<apex:page showHeader="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0" standardStylesheets="false">
+    <html>
+        <!-- 基幹システム風GUIをVisualforceで再現したもの。フォントが無い場合はスルーしてもOK -->
+        <head>
+            <title>基幹システム連携</title>
+            <style>.title,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
+                display:block
+                }
+                .block_row.col2,.block_row.col3,.trustform {
+                clear:both;
+                overflow:hidden
+                }
+                .title,.title h1 {
+                text-align:center
+                }
+                @font-face {
+                font-family:'MS Gothic';
+                src:url('{!URLFOR($Resource.MS_Gothic)}')
+                }
+                a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video {
+                margin:0;
+                padding:0;
+                border:0;
+                font:inherit;
+                vertical-align:baseline
+                }
+                body {
+                line-height:1;
+                font-size:13px;
+                font-weight:300;
+                background-color:#ececec;
+                font-family:"MS Gothic",Osaka,Arial,sans-serif
+                }
+                ol,ul {
+                list-style:none
+                }
+                blockquote,q {
+                quotes:none
+                }
+                blockquote:after,blockquote:before,q:after,q:before {
+                content:'';
+                content:none
+                }
+                table {
+                border-collapse:collapse;
+                border-spacing:0
+                }
+                * {
+                box-sizing:border-box
+                }
+                .wrapper {
+                max-width:540px;
+                margin:0 auto 40px
+                }
+                .left,.right {
+                padding:0 20px
+                }
+                @media (min-width:1080px) {
+                .wrapper {
+                max-width:1080px;
+                min-width:1080px
+                }
+                .left,.right {
+                padding:0 2%;
+                width:50%;
+                float:left;
+                box-sizing:border-box
+                }
+                }
+                .title {
+                margin:15px auto 25px
+                }
+                .title h1 {
+                font-size:18px;
+                margin:0;
+                display:inline-block;
+                padding:4px 60px;
+                width:auto;
+                color:#fff;
+                background-color:#00f
+                }
+                .block {
+                border:2px solid #000;
+                position:relative;
+                background-color:#dadada;
+                margin-bottom:20px
+                }
+                .block_title {
+                margin:0;
+                position:absolute;
+                height:18px;
+                line-height:18px;
+                border:1px solid #333;
+                top:-10px;
+                left:10px;
+                padding:0 10px;
+                background-color:#fafafa
+                }
+                .block_content {
+                padding:18px 0 8px 8px
+                }
+                .block_row {
+                margin-bottom:8px
+                }
+                .block_input,.block_row.col1>.block_input {
+                max-width:100%
+                }
+                .block_row.col2>.block_input {
+                padding-right:20px;
+                float:left
+                }
+                .block_row.col3>.block_input {
+                padding-right:8px;
+                max-width:33%;
+                float:left
+                }
+                .block_row.col2>.block_input:last-child,.block_row.col3>.block_input:last-child {
+                padding-right:0
+                }
+                .label_wrapper {
+                display:inline-block;
+                padding:1px;
+                background-color:#ECE9D9;
+                color:#333;
+                min-width:64px
+                }
+                .block_input label {
+                white-space:nowrap;
+                font-size:12px;
+                width:100%;
+                display:inline-block
+                }
+                .block_input input {
+                border-top:1px solid;
+                border-left:1px solid;
+                border-bottom:none;
+                border-right:none;
+                border-color:#999
+                }
+                .block_row.col1 .block_input input {
+                width:292px
+                }
+                .result {
+                background-color:rgba(115,106,106,.5)
+                }
+                .result .block_content {
+                padding:18px 15px 8px
+                }
+                .result .label_wrapper {
+                background-color:#717171;
+                color:#fff;
+                padding:0 8px;
+                vertical-align:top
+                }
+                .result .block_input input {
+                width:80px;
+                text-align:center;
+                height:30px;
+                font-size:18px;
+                padding:0;
+                border:none
+                }
+                .result .block_input.rightbtn {
+                float:right
+                }
+                .result .block_row {
+                line-height:30px
+                }
+                .execbutton {
+                background-color:#0058ff;
+                color:#fff;
+                border-color:#1c6aff;
+                outline:0
+                }
+                .clearbutton {
+                background-color:#fff;
+                border-color:#eaeaea;
+                outline: 0
+                }
+            </style>
+        </head>
+        <body>
+            <div class="wrapper">
+                <form class="trustform" id="creditForm">
+                    <div class="title">
+                        <h1>[基幹システム連携]</h1>
+                    </div>
+                    <div class="left">
+                        <div class="block">
+                            <div class="inner_wrapper">
+                                <h5 class="block_title">連携する顧客情報</h5>
+                                <div class="block_content">
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="lastname">姓</label>
+                                            </div>
+                                            <input id="lastname" type="text" value=""/>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="firstname">名</label>
+                                            </div>
+                                            <input id="firstname" type="text" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="email">メール</label>
+                                            </div>
+                                            <input id="email" type="text" value="" />
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="phone">電話</label>
+                                            </div>
+                                            <input id="phone" type="text" value="" style=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <div class="inner_wrapper">
+                                <h5 class="block_title">連携する住所</h5>
+                                <div class="block_content">
+                                    <div class="block_row col1">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="address">住所</label>
+                                            </div>
+                                            <input id="address" type="text" value="" style="width: 305px;"/>
+                                        </div>
+                                    </div>
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="housetype">住居種類</label>
+                                            </div>
+                                            <select id="housetype">
+                                                <option value="1">自己所有</option>
+                                                <option value="2">家族所有</option>
+                                                <option value="3">賃貸</option>
+                                                <option value="4">その他</option>
+                                            </select>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="livingdatetime">居住開始年月</label>
+                                            </div>
+                                            <input id="livingdatetime" type="month" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="block" style="display:none;">
+                            <div class="inner_wrapper">
+                                <h5 class="block_title">職業</h5>
+                                <div class="block_content">
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="vocation">職業</label>
+                                            </div>
+                                            <select id="vocation">
+                                                <option value="1">会社員</option>
+                                                <option value="2">公務員</option>
+                                                <option value="3">会社役員</option>
+                                                <option value="4">自営業</option>
+                                                <option value="5">その他</option>
+                                            </select>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="workstyle">勤務形態</label>
+                                            </div>
+                                            <select id="workstyle">
+                                                <option value="1">正社員</option>
+                                                <option value="2">契約社員</option>
+                                                <option value="3">派遣社員</option>
+                                                <option value="4">その他</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="block_row col1">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="workplace">勤務先名</label>
+                                            </div>
+                                            <input id="workplace" type="text" value="" style="width: 369px;"/>
+                                        </div>
+                                    </div>
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="salary">給与収入(万円)</label>
+                                            </div>
+                                            <input id="salary" type="text" value=""/>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="workyears">勤続年数</label>
+                                            </div>
+                                            <input id="workyears" type="text" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="block" style="display:none;">
+                            <div class="inner_wrapper">
+                                <h5 class="block_title">資金使途</h5>
+                                <div class="block_content">
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="usage">資金使途</label>
+                                            </div>
+                                            <select id="usage">
+                                                <option value="1">新築物件購入</option>
+                                                <option value="2">中古物件購入</option>
+                                                <option value="3">借り換え</option>
+                                                <option value="4">建物新築</option>
+                                            </select>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="proptype">物件種類</label>
+                                            </div>
+                                            <select id="proptype">
+                                                <option value="1">一戸建て</option>
+                                                <option value="2">マンション</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="block_row col1">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="propplace">物件所在地</label>
+                                            </div>
+                                            <input id="propplace" type="text" value="" style="width: 377px;"/>
+                                        </div>
+                                    </div>
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="purdate">購入日</label>
+                                            </div>
+                                            <input id="purdate" type="date" value=""/>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="purprice">購入価格(万円)</label>
+                                            </div>
+                                            <input id="purprice" type="text" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right">
+
+                        <div class="block" style="display:none;">
+                            <div class="inner_wrapper">
+                                <h5 class="block_title">借入内容</h5>
+                                <div class="block_content">
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="debtvalue">借入希望額(万円)</label>
+                                            </div>
+                                            <input id="debtvalue" type="text" value=""/>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="debtterm">借入期間(年)</label>
+                                            </div>
+                                            <input id="debtterm" type="text" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="block" style="display:none;">
+                            <div class="inner_wrapper">
+                                <h5 class="block_title">資金計画</h5>
+                                <div class="block_content">
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="ownvalue">自己資金(万円)</label>
+                                            </div>
+                                            <input id="ownvalue" type="text" value=""/>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="deposite">預貯金(万円)</label>
+                                            </div>
+                                            <input id="deposite" type="text" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="block" style="display:none;">
+                            <div class="inner_wrapper">
+                                <h5 class="block_title">他借入状況</h5>
+                                <div class="block_content">
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="debtfrom">借入先</label>
+                                            </div>
+                                            <input id="debtfrom" type="text" value="" style="width: 149px;"/>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="debtym">借入年月</label>
+                                            </div>
+                                            <input id="debtym" type="month" value=""/>
+                                        </div>
+                                    </div>
+
+                                    <div class="block_row col2">
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="remainedterm">残期間</label>
+                                            </div>
+                                            <input id="remainedterm" type="text" value=""/>
+                                        </div>
+                                        <div class="block_input">
+                                            <div class="label_wrapper">
+                                                <label for="curbalance">現在残高(万円)</label>
+                                            </div>
+                                            <input id="curbalance" type="text" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="result">
+                            <div class="inner_wrapper">
+                                <div class="block_content">
+                                    <div class="block_row col2">
+                                        <div class="block_input rightbtn">
+                                            <button id="execEval" class="execbutton">　実行　</button>
+                                            <button id="execClear" class="clearbutton" style="margin-right:20px;">取消</button>
+                                            <input id="crediteval" type="text" value="結果" readonly="true" style="width: 138px;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var evalOptions = ["完了しました"];
+                var evalBtn = document.getElementById("execEval");
+                var evalOutput = document.getElementById("crediteval");
+                var clearBtn = document.getElementById("execClear");
+                var creditForm = document.getElementById("creditForm");
+
+                evalBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+
+                    evalBtn.style.cursor = "wait";
+                    document.body.style.cursor = "wait";
+                    setTimeout(function() {
+                        evalBtn.style.cursor = "default";
+                        document.body.style.cursor = "default";
+                        var rand = Math.floor(Math.random() * Math.floor(1));
+                        evalOutput.value = evalOptions[rand];
+                    }, 1400);
+
+                    setTimeout(function() {
+                        e.preventDefault();
+                        creditForm.reset();
+                    }, 4000);
+
+                });
+
+                clearBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    creditForm.reset();
+                });
+            });
+            </script>
+        </body>
+    </html>
+</apex:page>

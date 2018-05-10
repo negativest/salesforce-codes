@@ -1,0 +1,19 @@
+<apex:page standardController="LegasySystem__c">
+    <h1>基幹システム</h1>
+    <!-- 基幹システム風のカスタムオブジェクトにInput/UpdateをするVisualforce、元ネタのカスタムオブジェクト名を間違ってLegasyとしている点に注意 ^^; -->
+    <apex:form >
+        <apex:pageBlock >
+        <apex:pageBlockSection columns="1">
+            <apex:inputField value="{!LegasySystem__c.Name }"/>
+            <apex:inputField value="{!LegasySystem__c.Email__c }"/>
+            <apex:inputField value="{!LegasySystem__c.Phone__c }"/>
+            <apex:inputField value="{!LegasySystem__c.Department__c }"/>
+            <apex:inputField value="{!LegasySystem__c.Notes__c }"/>
+        </apex:pageBlockSection>
+
+        <apex:commandButton action="{! save }" value="保存" />
+        </apex:pageBlock>
+
+    </apex:form>
+
+</apex:page>
