@@ -1,0 +1,5 @@
+<design:component label="Call Script">
+	<design:attribute name="callscript" label="Call Script"/>
+    <design:attribute name="lightningicon" label="Lightning Icon" />
+    <design:attribute name="iconvariant" label="Icon's Variant" />
+</design:component>

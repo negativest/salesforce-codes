@@ -1,0 +1,4 @@
+<design:component >
+	<design:attribute name="href" label="遷移先URL"/>
+    <design:attribute name="message" label="表示するメッセージ"/>
+</design:component>

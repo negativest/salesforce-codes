@@ -1,0 +1,15 @@
+<aura:component implements="lightning:availableForFlowScreens" access="global">
+    <aura:attribute name="callscript" type="String" default="こんにちは" access="global" />
+    <aura:attribute name="lightningicon" type="String" default="utility:flow" access="global" />
+    <aura:attribute name="iconvariant" type="String" default="" access="global" />
+    <div>
+        <div style="padding:15px; border-style: solid; border-width: 2px; border-color:#b0adab; border-radius: 
+                    10px 10px 10px 10px; box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.2); 
+                    margin-bottom: 10px;">
+            <div style="float:left; margin-right:15px;">
+                <lightning:icon iconName="{!v.lightningicon}" variant="{!v.iconvariant}"/>
+            </div>
+            <span style="font-size: 18px; line-height:2;" class="greeting">{!v.callscript}</span>
+        </div>
+    </div>
+</aura:component>
