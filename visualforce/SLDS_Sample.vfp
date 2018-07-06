@@ -1,0 +1,366 @@
+<apex:page id="RepairOrderEdit" standardController="Case" extensions="RepairEditController" tabStyle="Case" action="{!init}" title="修理受付" showHeader="false" applyHtmlTag="false" applyBodyTag="false" >
+    <meta name="robots" content="noindex,nofollow"/>
+    <apex:slds rendered="true"/>
+    <div class="slds-scope">
+                <div id="wrapper">
+                    <apex:form id="form" >
+                        <apex:pageBlock id="registrationBlock" >
+                            <apex:outputText value=" {!$Label.LIXIL_ERROR_MESSAGE} " style="color:#DD0000; display: block; text-align:center; font-weight: bold;" escape="false" rendered="{!errFlg}"/>
+                            <apex:outputText value="{!$Label.LIXIL_EXCLUSIVE_ERROR_MESSAGE}" style="color:#DD0000; display: block; text-align:center; font-weight: bold;" escape="false" rendered="{!tranErrFlg}"/>
+                            <apex:pageBlockButtons location="both" >
+                                <!-- 保存ボタン -->
+                                <apex:commandButton action="{!save}" styleClass="slds-button slds-button--brand" value=" {!$Label.LIXIL_SAVEBTN} " style="font-size: 80%;" oncomplete="return setSaveSubTabTitle('{!caseNumber}', '{!errFlg}');" rerender="msgArea,registrationBlock" />
+                                <apex:actionFunction name="transition" action="{!transition}" reRender="msgArea,registrationBlock" />
+                                <!-- 保存＆新規ボタン -->
+                                <!--<apex:commandButton action="{!save}" value="{!$Label.LIXIL_SAVEANDNEWBTN}" style="font-size: 80%;" oncomplete="return setSaveAndNewSubTabTitle('{!caseId}', '{!caseNumber}', '{!errFlg}');" rerender="msgArea,registrationBlock" />-->
+                                <apex:actionFunction name="transition" action="{!transition}" reRender="msgArea,registrationBlock" />
+                                <!-- キャンセルボタン -->
+                                <apex:commandButton styleClass="slds-button slds-button--neutral" value=" {!$Label.LIXIL_CANCELBTN} " style="font-size: 80%;" oncomplete="return cancelOperation('{!caseId}', '{!caseNumber}');"  rerender="msgArea,registrationBlock" />
+                                <apex:actionFunction name="cancel" action="{!cancel}" reRender="msgArea,registrationBlock" />
+                            </apex:pageBlockButtons>
+                            <!-- 受付情報(問合せ内容) -->
+                            <apex:pageBlockSection columns="2"  collapsible="false">
+<!--                                <apex:outputPanel style="color:#000000;font-weight:bold;background-color:#F5F5DC;margin: 0 -500%;padding:3px 500%;">
+                                    <apex:outputText value=" {!$Label.LIXIL_CASE_SECTION_RECEPTION_INQUIRY}" />
+                                </apex:outputPanel><br/>-->
+                                <apex:inputField value="{!record.IraimotoSyubetu__c}" />
+                                <apex:inputField value="{!record.Status}" required="true"/>
+                                <apex:inputField value="{!record.IraiBunrui__c}" /><br/>
+                                <apex:inputField value="{!record.IraiBunruiSyousai__c}" />
+                            </apex:pageBlockSection>
+
+                            <div class="slds-tabs--scoped">
+                                <ul class="slds-tabs--scoped__nav" role="tablist">
+                                    <li class="slds-tabs--scoped__item slds-active" title="施主情報" role="presentation"><a class="slds-tabs--scoped__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-scoped-1" id="tab-scoped-1__item">施主情報</a></li>
+                                    <li class="slds-tabs--scoped__item" title="対象商品情報" role="presentation"><a class="slds-tabs--scoped__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-scoped-2" id="tab-scoped-2__item">対象商品情報</a></li>
+                                    <li class="slds-tabs--scoped__item" title="受付情報（基本）" role="presentation"><a class="slds-tabs--scoped__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-scoped-3" id="tab-scoped-3__item">受付情報（基本）</a></li>
+                                    <li class="slds-tabs--scoped__item" title="依頼元情報" role="presentation"><a class="slds-tabs--scoped__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-scoped-4" id="tab-scoped-4__item">依頼元情報</a></li>
+                                    <li class="slds-tabs--scoped__item" title="請求先" role="presentation"><a class="slds-tabs--scoped__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-scoped-5" id="tab-scoped-5__item">請求先</a></li>
+                                    <li class="slds-tabs--scoped__item" title="その他" role="presentation"><a class="slds-tabs--scoped__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-scoped-6" id="tab-scoped-6__item">その他</a></li>
+
+                                </ul>
+                                <div id="tab-scoped-1" class="slds-tabs--scoped__content slds-show" role="tabpanel" aria-labelledby="tab-scoped-1__item">
+                                    <!-- 施主情報 -->
+                                    <apex:pageBlockSection id="seshuInfo" columns="2"  collapsible="false">
+<!--                                        <apex:outputPanel style="color:#000000;font-weight:bold;background-color:#F5F5DC;margin: 0 -500%;padding:3px 500%;">
+                                            <apex:outputText value=" {!$Label.LIXIL_CASE_SECTION_CLIENTINFO}" />
+                                        </apex:outputPanel><br/>-->
+                                        <apex:inputField value="{!record.Seshu__c}" /><br/>
+                                        <apex:inputField value="{!record.SesyuLastName__c}" styleClass="seshuLastNameInput"/>
+                                        <apex:inputField value="{!record.SeshuFirstName__c}" styleClass="seshuFirstNameInput"/>
+                                        <apex:inputField value="{!record.SeshuLastKana__c}" styleClass="seshuLastNameAutokana"/>
+                                        <apex:inputField value="{!record.SeshuFirstNameKana__c}" styleClass="seshuFirstNameAutokana"/>
+                                        <apex:inputField value="{!record.SeshuPhone1__c}"/>
+                                        <apex:inputField value="{!record.SeshuPhone2__c}"/>
+                                        <apex:pageBlockSectionItem id="seshuAddressInfo">
+                                            <apex:outputPanel >
+                                                <div id="labelStyle">
+                                                    <!-- 施主郵便番号【半角】 * -->
+                                                    <apex:outputLabel value="{!$ObjectType.Case.Fields.SeshuZipCd__c.Label}" />
+                                                </div>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel >
+                                                <apex:actionRegion >
+                                                    <apex:outputPanel layout="none">
+                                                        <apex:inputField id="seshuZipCd" value="{!record.SeshuZipCd__c}" />
+                                                        <!-- 住所検索 -->
+                                                        <apex:commandButton value="{!$Label.LIXIL_SEARCHADDRESSBTN}" reRender="address0" onClick="return openSerchAddress(1);"/>
+                                                    </apex:outputPanel>
+                                                </apex:actionRegion>
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSectionItem>
+                                        <apex:inputField value="{!record.SeshuPhoneNotes__c}"/>
+                                        <apex:inputField value="{!record.SeshuAddress__c}" id="address0" style="width:400px"/><br/>
+                                        <apex:inputField value="{!record.SeshuKatagaki__c}"/>
+                                    </apex:pageBlockSection>
+
+                                </div>
+                                <div id="tab-scoped-2" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-2__item">
+                                    <!-- 対象商品情報 -->
+                                    <apex:pageBlockSection columns="2"  collapsible="false">
+<!--                                        <apex:outputPanel style="color:#000000;font-weight:bold;background-color:#F5F5DC;margin: 0 -500%;padding:3px 500%;">
+                                            <apex:outputText value=" {!$Label.LIXIL_CASE_SECTION_PRODUCTINFO}" />
+                                        </apex:outputPanel><br/>-->
+                                        <apex:inputField value="{!record.Brand__c}" />
+                                        <apex:inputField value="{!record.InstalledYear__c}" />
+                                        <apex:inputField value="{!record.Hinmei__c}" />
+                                        <apex:inputField value="{!record.InstalledMonth__c}" />
+                                        <apex:inputField value="{!record.HinmeiOther__c}" />
+                                        <apex:inputField value="{!record.Contractor__c}" />
+                                        <apex:inputField value="{!record.Hinban__c}" />
+                                    </apex:pageBlockSection>
+
+                                </div>
+                                <div id="tab-scoped-3" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-3__item">
+                                    <!-- 受付情報（基本） -->
+                                    <apex:pageBlockSection columns="2"  collapsible="false">
+<!--                                        <apex:outputPanel style="color:#000000;font-weight:bold;background-color:#F5F5DC;margin: 0 -500%;padding:3px 500%;">
+                                            <apex:outputText value=" {!$Label.LIXIL_CASE_SECTION_RECEPTION_BASIC}" />
+                                        </apex:outputPanel><br/>-->
+                                        <apex:inputField value="{!record.Detail__c}" style="width:200px; height:40px;"/><br/>
+                                        <apex:inputField value="{!record.UrgentCd__c}" />
+                                        <apex:inputField value="{!record.AppoDateOfRepair__c}" />
+                                        <apex:inputField value="{!record.TenpuFlg__c}" />
+                                        <apex:inputField value="{!record.AppoTimeOfRepair__c}" />
+                                        <apex:outputText value="" />
+                                        <apex:inputField value="{!record.DesiredOrSpecified__c}" />
+                                    </apex:pageBlockSection>
+                                    <apex:pageBlockSection columns="2"  collapsible="false">
+                                        <apex:inputField value="{!record.MessageInside__c}" style="width:400px; height:80px;"/><br/>
+                                        <apex:inputField value="{!record.IraimotoMessage__c}" style="width:400px; height:80px;"/>
+                                    </apex:pageBlockSection>
+
+                                </div>
+                                <div id="tab-scoped-4" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-4__item">
+                                    <!-- 依頼元情報 -->
+                                    <apex:pageBlockSection id="iraimotoInfo" columns="2"  collapsible="false">
+<!--                                        <apex:outputPanel style="color:#000000;font-weight:bold;background-color:#F5F5DC;margin: 0 -500%;padding:3px 500%;">
+                                            <apex:outputText value=" {!$Label.LIXIL_CASE_SECTION_REQUESTERINFO}" />
+                                        </apex:outputPanel><br/>-->
+                                        <apex:inputField value="{!record.IraimotoKbn__c}" /><br/>
+                                        <apex:inputField value="{!record.Iraimoto__c}" />
+                                        <apex:inputField value="{!record.IraimotoCd__c}" />
+                                        <apex:inputField value="{!record.IraimotoCompanyName__c}" styleClass="iraimotoCompanyNameInput"/>
+                                        <apex:inputField value="{!record.IraimotoPhone__c}" />
+                                        <apex:inputField value="{!record.IraimotoCompanyNameKana__c}" styleClass="iraimotoCompanyNameAutokana"/>
+                                        <apex:inputField value="{!record.IraimotoFax__c}" />
+                                        <apex:inputField value="{!record.IraimotoTantosyaName__c}" />
+                                        <apex:pageBlockSectionItem id="iraimotoAddressInfo">
+                                            <apex:outputPanel >
+                                                <!-- 依頼元郵便番号【半角】 -->
+                                                <div id="labelStyle">
+                                                    <apex:outputLabel value="{!$ObjectType.Case.Fields.IraimotoZipCd__c.Label}" />
+                                                </div>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel >
+                                                <apex:actionRegion >
+                                                    <apex:outputPanel >
+                                                        <apex:inputField id="iraimotoZipCd" value="{!record.IraimotoZipCd__c}"/>
+                                                        <!-- 住所検索ボタン -->
+                                                        <apex:commandButton value="{!$Label.LIXIL_SEARCHADDRESSBTN}" reRender="addressPro0" onClick="return openSerchAddress(2);"/>
+                                                    </apex:outputPanel>
+                                                </apex:actionRegion>
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSectionItem>
+                                        <apex:inputField value="{!record.IraimotoOrderNo__c}" />
+                                        <apex:inputField value="{!record.IraimotoAddress__c}" id="addressPro0" style="width:400px"/>
+                                        <apex:inputField value="{!record.IraimotoInfo__c}" style="width:230px; height:50px;"/>
+                                    </apex:pageBlockSection>
+                                </div>
+                                <div id="tab-scoped-5" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-5__item">
+                                    <!-- 請求先 -->
+                                    <apex:pageBlockSection id="seikyusakiInfo" columns="2"  collapsible="false">
+<!--                                        <apex:outputPanel style="color:#000000;font-weight:bold;background-color:#F5F5DC;margin: 0 -500%;padding:3px 500%;">
+                                            <apex:outputText value=" {!$Label.LIXIL_CASE_SECTION_BILLTO}" />
+                                        </apex:outputPanel><br/>-->
+                                        <apex:inputField value="{!record.SeikyusakiKbn__c}" />
+                                        <apex:inputField value="{!record.SeikyusakiCd__c}" />
+                                        <apex:inputField value="{!record.Seikyusaki__c}" />
+                                        <apex:inputField value="{!record.SeikyusakiPhone__c}" />
+                                        <apex:inputField value="{!record.SeikyusakiCompanyName__c}" styleClass="seikyusakiCompanyNameInput" />
+                                        <apex:inputField value="{!record.SeikyusakiFax__c}" />
+                                        <apex:inputField value="{!record.SeikyusakiCompanyNameKana__c}" styleClass="seikyusakiCompanyNameAutokana" />
+                                        <apex:pageBlockSectionItem id="seikyusakiAddressInfo" >
+                                            <apex:outputPanel >
+                                                <!-- 請求先郵便番号【半角】 -->
+                                                <div id="labelStyle">
+                                                    <apex:outputLabel value="{!$ObjectType.Case.Fields.SeikyusakiZipCd__c.Label}"/>
+                                                </div>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel >
+                                                <apex:actionRegion >
+                                                    <apex:outputPanel >
+                                                        <apex:inputField id="seikyusakiZipCd" value="{!record.SeikyusakiZipCd__c}" />
+                                                        <!-- 住所検索ボタン -->
+                                                        <apex:commandButton value="{!$Label.LIXIL_SEARCHADDRESSBTN}" reRender="addressBil0" onClick="return openSerchAddress(3);"/>
+                                                    </apex:outputPanel>
+                                                </apex:actionRegion>
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSectionItem>
+                                        <apex:inputField value="{!record.SeikyusakiTantousyaName__c}" />
+                                        <apex:inputField value="{!record.SeikyusakiAddress__c}" id="addressBil0" style="width:400px"/>
+                                        <apex:inputField value="{!record.SeikyusakiOrderNo__c}" />
+                                        <apex:inputField value="{!record.SeikyusakiKatagaki__c}" />
+                                        <apex:outputText value="" />
+                                        <apex:inputField value="{!record.PayPlanDate__c}" />
+                                    </apex:pageBlockSection>
+                                </div>
+
+
+                            <div id="tab-scoped-6" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-scoped-6__item">
+                                <!-- その他 -->
+                                <apex:pageBlockSection columns="1"  collapsible="false">
+<!--                                    <apex:outputPanel style="color:#000000;font-weight:bold;background-color:#F5F5DC;margin: 0 -500%;padding:3px 500%;">
+                                        <apex:outputText value=" {!$Label.LIXIL_CASE_SECTION_OTHER}" />
+                                    </apex:outputPanel>-->
+                                    <apex:inputField value="{!record.UseREBIUS__c}" />
+                                    <apex:inputField value="{!record.memo__c}" style="width:400px"/>
+                                    <apex:outputField value="{!record.ConnID__c}" />
+                                    <!-- outputFieldでは分までしか表示されないため、outputTextを使用
+また、paramでそのままカラムを取り出すとなぜかObject型となってしまうため、変数に格納してから表示
+GMT表記となるため、時差を補完(0.375 = +9h/24h)
+-->
+                                    <apex:outputText label="電話受信日時" value="{0,date,yyyy/MM/dd HH:mm:ss}">
+                                        <apex:param value="{!receiveDatetime + 0.375}" />
+                                    </apex:outputText>
+                                </apex:pageBlockSection>
+                            </div>
+                                                            </div>
+
+                        </apex:pageBlock>
+                        <apex:inputHidden value="{!caseNumber}" Id="caseNumber"/>
+                        <apex:inputHidden value="{!editPattern}" Id="editPattern"/>
+                        <apex:inputHidden value="{!retURL}" Id="retURL"/>
+                        <apex:inputHidden value="{!accountFlg}" id="accountFlg"/>
+                    </apex:form>
+                </div>
+
+                    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+
+<script type="text/javascript" charset="UTF-8" src="{!$Resource.autoKanaJS}"></script>
+<script type="text/javascript">
+    // ふりがなの入力補助
+    jQuery(document).ready(function($){
+    $.fn.autoKana('.seshuLastNameInput','.seshuLastNameAutokana', {katakana:true});
+    $.fn.autoKana('.seshuFirstNameInput','.seshuFirstNameAutokana', {katakana:true});
+    $.fn.autoKana('.iraimotoCompanyNameInput','.iraimotoCompanyNameAutokana', {katakana:true});
+    $.fn.autoKana('.seikyusakiCompanyNameInput','.seikyusakiCompanyNameAutokana', {katakana:true});
+});
+</script>
+<apex:includeScript value="/support/console/22.0/integration.js"/>
+<script type="text/javascript">
+var editPattern = document.getElementById('{!$Component.form.editPattern}').value;
+var title = document.getElementById('{!$Component.form.caseNumber}').value;
+
+// タブの名称を設定（初期表示）
+addOnLoad(
+    function () {
+        if(editPattern != '1'){
+            var title = '新規問合せ'
+            } else {
+                var title = '[編集]' + document.getElementById('{!$Component.form.caseNumber}').value;
+            }
+        sforce.console.setTabTitle(title);
+    });
+
+// 以下は固定
+function addOnLoad(func) {
+    try {
+        window.addEventListener("load", func, false);
+    } catch (e) {
+        window.attachEvent("onload", func);
+    }
+}
+
+// タブの名称を設定
+setSubTabTitle();
+function setSubTabTitle(){
+    var title = document.getElementById('{!$Component.form.caseNumber}').value;
+    sforce.console.setTabTitle(title);
+    return false;
+}
+
+// 保存時のタブの名称を設定し、ページ遷移
+function setSaveSubTabTitle(caseNumber, errFlg){
+    if (errFlg == 'false') {
+        var title = caseNumber;
+        sforce.console.setTabTitle(title);
+        transition();
+    }
+    return false;
+}
+
+// 保存&新規時のタブの名称を設定し、ページ遷移
+function setSaveAndNewSubTabTitle(caseId, caseNumber, errorFlg) {
+    if (errorFlg == 'false') {
+        // 編集の場合
+        if (editPattern == '1') {
+            var oldTitle = caseNumber;
+            sforce.console.setTabTitle(oldTitle);
+            transition();
+            openNewPage();
+            // 新規/コピーの場合
+        } else {
+            var newTitle = caseNumber;
+            sforce.console.setTabTitle(newTitle);
+            transition();
+            openNewPage();
+        }
+    }
+    return false;
+}
+
+// 新規サブタブを開く
+function openNewPage(){
+    sforce.console.getEnclosingPrimaryTabId(function(primaryResult){
+        sforce.console.openSubtab(primaryResult.id, '/500/e', true, '', null);
+    });
+}
+
+// キャンセルボタン押下時の処理
+function cancelOperation(caseId, caseNumber) {
+    var accountFlg = document.getElementById('{!$Component.form.accountFlg}').value;
+    if(accountFlg === 'true'){
+        sforce.console.getEnclosingTabId(closeSubtab);
+    }
+    if(editPattern == '1'){
+        var title = caseNumber;
+        sforce.console.setTabTitle(title);
+        cancel();
+    } else {
+        sforce.console.getEnclosingTabId(closeSubtab);
+    }
+
+    return false;
+}
+var closeSubtab = function closeSubtab(result) {
+    var tabId = result.id;
+    sforce.console.closeTab(tabId);
+}
+
+// 施主住所検索ボタン押下時の処理
+function openSerchAddress(section) {
+    window.open('/apex/SearchAddressPage?section=' + section,'Child','height=500,width=700,left=100,top=100,scrollbars=yes,toolbar=no,status=no');
+}
+
+// 住所設定
+function setAddress(zip, address, section) {
+    // 呼び出しセクションによって分岐
+    if (section == 1) {
+        // 施主の場合
+        document.getElementById('{!$Component.form.registrationBlock.seshuInfo.seshuAddressInfo.seshuZipCd}').value = zip;
+        document.getElementById('{!$Component.form.registrationBlock:seshuInfo.address0}').value = address;
+    } else if (section == 2) {
+        // 依頼元の場合
+        document.getElementById('{!$Component.form.registrationBlock.iraimotoInfo.iraimotoAddressInfo.iraimotoZipCd}').value = zip;
+        document.getElementById('{!$Component.form.registrationBlock:iraimotoInfo.addressPro0}').value = address;
+    } else if (section == 3) {
+        // 請求先の場合
+        document.getElementById('{!$Component.form.registrationBlock.seikyusakiInfo.seikyusakiAddressInfo.seikyusakiZipCd}').value = zip;
+        document.getElementById('{!$Component.form.registrationBlock:seikyusakiInfo.addressBil0}').value = address;
+    }
+}
+
+var closeSubtab = function closeSubtab(result) {
+    var tabId = result.id;
+    sforce.console.closeTab(tabId);
+};
+
+</script>
+<script type="text/javascript">
+var j$ = jQuery.noConflict();
+/*SLDS Tabs JS*/
+j$('.slds-tabs--scoped__link').click(function(){
+    j$(this).parent().parent().find('.slds-tabs--scoped__link').attr('aria-selected','false');
+    j$(this).attr('aria-selected','true');
+    j$(this).parent().parent().find('.slds-tabs--scoped__link').attr('tabindex','-1');
+    j$(this).attr('tabindex','0');
+    j$(this).parent().addClass('slds-active').siblings().removeClass('slds-active');
+    j$(this).parent().parent().parent().find('.'+j$(this).parent().parent().parent().find('.slds-tabs--scoped__content')[0].classList[0]).removeClass('slds-show').addClass('slds-hide');
+    j$(this).parent().parent().parent().find('#'+j$(this).attr('aria-controls')).removeClass('slds-hide').addClass('slds-show');
+});
+/*SLDS Tabs JS*/
+</script>
+</div>
+</apex:page>
