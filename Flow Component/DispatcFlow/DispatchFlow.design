@@ -1,4 +1,4 @@
 <design:component>
-    <design:attribute name="href" label="href" description="a tag href attribute"/>
-    <design:attribute name="word" label="Word" description="You can set a work between a tags."/>
+    <design:attribute name="href" label="href" description="a tag href attribute(e.g. /lightning/r/Case/{!edspCreatedCaseID}/view)"/>
+    <design:attribute name="word" label="Word" description="You can set a word between a tags."/>
 </design:component>
