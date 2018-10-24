@@ -1,7 +1,7 @@
 <aura:component  implements="lightning:availableForFlowScreens">
     <aura:attribute name="href" type="String" />
     <aura:attribute name="word" type="String" />
-    <lightning:card iconName="custom:custom80 " class="slds-is-relative">
+    <lightning:card iconName="custom:custom80" class="slds-is-relative">
         <div class="slds-box">
             <lightning:workspaceAPI aura:id="workspace"/>
             <lightning:button class="slds-button slds-button_brand" label="{!v.word}" onclick="{!c.openTab}"/>
