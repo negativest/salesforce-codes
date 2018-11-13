@@ -1,0 +1,5 @@
+<design:component>
+    <design:attribute name="src" label="src" description="img tag src attribute"/>
+    <design:attribute name="alt" label="alt" description="img tag alt attribute"/>
+    <design:attribute name="style" label="style" description="img tag style attribute"/>
+</design:component>
