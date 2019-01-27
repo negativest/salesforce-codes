@@ -1,0 +1,4 @@
+Winter'19のDeveloper系リリース試験で作成
+Mapコンポーネントを使ってピンを打った地図を表示できる
+位置情報はカスタムオブジェクトを使っているのでClassでSelectしてきているようだ。
+https://trailhead.salesforce.com/ja/content/learn/modules/platform-developer-i-certification-maintenance-winter-19/work-with-the-lightning-map-component-and-apex-inherited-sharing
