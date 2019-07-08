@@ -1,0 +1,38 @@
+<apex:page standardController="Case" extensions="CurrentRecordIDGetterController">
+    <apex:includeLightning />
+    <div id='nbaWidget' />
+    <script>
+    $Lightning.use('c:lcvfTest', function() {
+        $Lightning.createComponent('lightning:nextBestActions',
+             {
+                 widgetTitle : 'EinsteinRecommendations' ,
+                 singleColumn : 'true' ,
+                 strategyName : 'OfferDiscountCoupon' ,
+                 recordId : '{!currentRecordId}'
+             },
+             'nbaWidget',
+             function(cmp) {
+                 // do some stuff
+                 debugger;
+             });
+    });
+    </script>
+
+    <!-- デバッグ -->
+    <A HREF="#" onClick="testGetFocusedPrimaryTabObjectId();return false">ここをクリックでConsole Integration JSでレコードID取得</A>
+    <apex:includeScript value="/support/console/46.0/integration.js"/>
+    <script type="text/javascript">
+    // ControllerからのID
+    //alert('{!currentRecordId}');
+
+    function testGetFocusedPrimaryTabObjectId() {
+        sforce.console.getFocusedPrimaryTabObjectId(showObjectId);
+    }
+    var showObjectId = function showObjectId(result) {
+        //Display the object ID
+        alert('Object ID: ' + result.id);
+    };
+
+    </script>
+
+</apex:page>

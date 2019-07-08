@@ -1,0 +1,8 @@
+public class CurrentRecordIDGetterController {
+public String currentRecordId {get;set;}
+public String parameterValue {get;set;}
+    public CurrentRecordIDGetterController(ApexPages.StandardController controller) {
+        currentRecordId  = ApexPages.CurrentPage().getparameters().get('id');
+        //parameterValue = ApexPages.CurrentPage().getparameters().get('nameParam');
+    }
+}

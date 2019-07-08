@@ -1,0 +1,21 @@
+<apex:page standardController="Case">    
+    <apex:includeLightning />
+    <div id='nbaWidget' />
+    <script>
+    var recordId = '{!case.Id}'
+    $Lightning.use('c:lcvfTest', function() {
+    $Lightning.createComponent('lightning:nextBestActions',
+         {
+             widgetTitle : 'EinsteinRecommendations' ,
+             singleColumn : 'true' ,
+             strategyName : 'OfferDiscountCoupon' ,
+             recordId : recordId
+         },
+         'nbaWidget',
+         function(cmp) {
+             // do some stuff
+             debugger;
+         });
+    });
+    </script>
+</apex:page>
