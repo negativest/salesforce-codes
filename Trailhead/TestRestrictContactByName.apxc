@@ -1,0 +1,14 @@
+@isTest
+public class TestRestrictContactByName {
+    
+    @isTest static void testRestrictContactByName()
+    {
+        // Test data setup
+        Contact cntctOK = new Contact(LastName='Nabee');
+        insert cntctOK;
+        
+        Contact cntctNG = new Contact(LastName='INVALIDNAME');
+        insert cntctNG;
+        
+    }
+}

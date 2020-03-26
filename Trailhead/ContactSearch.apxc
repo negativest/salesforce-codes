@@ -1,0 +1,9 @@
+public class ContactSearch {
+	public static Contact[] searchForContacts (String mylastname, String mypostalcode)
+    {
+        Contact[] conlist = [Select ID,Name from Contact where LastName = :mylastname and MailingPostalCode = :mypostalcode];
+        
+        
+        return conlist;
+    }
+}
