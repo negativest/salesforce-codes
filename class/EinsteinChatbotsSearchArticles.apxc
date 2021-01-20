@@ -25,14 +25,12 @@ global class EinsteinChatbotsSearchArticles {
         category = String.join(category.split(' '), '_') + '__c';
         category = category == 'All__c' ? 'below ' + category :  'above ' + category;
         /*string searchString = 'FIND \'' + searchQuery + '*\' IN ALL FIELDS RETURNING Knowledge__kav (ID, Title,FAQ_Chat_Answer__c, UrlName, KnowledgeArticleId) WITH DATA CATEGORY Support_Typet__c '+ category +' limit 3'; */
-        string searchString = 'FIND \'' + searchQuery + '\' IN ALL FIELDS RETURNING Knowledge__kav (ID, Title,FAQ_Chat_Answer__c,FAQ_Internal_Comments__c,FAQ_Question__c,KCSArticle_Resolution__c,Summary,FAQ_Answer__c, UrlName, KnowledgeArticleId where PublishStatus =\'online\' and Language = \'ja\') limit 3';
-
-
+        /*string searchString = 'FIND \'' + searchQuery + '\' IN ALL FIELDS RETURNING Knowledge__kav (ID, Title,FAQ_Chat_Answer__c,FAQ_Internal_Comments__c,FAQ_Question__c,KCSArticle_Resolution__c,Summary,FAQ_Answer__c, UrlName, KnowledgeArticleId where PublishStatus =\'online\' and Language = \'ja\') limit 3';*/
         /*string searchString = 'FIND {apple} IN ALL FIELDS RETURNING Knowledge__kav (ID, Title,FAQ_Chat_Answer__c, UrlName, KnowledgeArticleId) limit 3';*/
-        system.debug(searchString);
-        
+        /*system.debug(searchString);*/
+        /*List<List<SObject>> catdata = Search.query(searchString);*/
 
-        List<List<SObject>> catdata = Search.query(searchString);
+        List<List<SObject>> catdata = [FIND :searchQuery IN ALL FIELDS RETURNING Knowledge__kav (ID, Title,Summary,chat_answer__c,UrlName, KnowledgeArticleId where PublishStatus ='online' and Language = 'ja') limit 5];
   
         return catdata[0];
 
